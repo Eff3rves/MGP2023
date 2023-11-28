@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="horizontal"
+             android:background="@drawable/techappbg">
+
+    <Button
+        android:id ="@+id/btn_start"
+        android:layout_width="158dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="194dp"
+        android:layout_marginRight="462dp"
+        android:background="@drawable/button"
+        android:text="Start"
+        android:textColor="#ff0000"
+        />
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="158dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="288dp"
+        android:layout_marginRight="460dp"
+        android:background="@drawable/button"
+        android:text="Back"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="178dp"
+        android:layout_marginTop="100dp"
+        android:text="Netrunner"
+        android:textAlignment="center"
+        android:textColor="#0099ff"
+        android:textSize="100px" />
+
+</RelativeLayout>
