@@ -26,6 +26,7 @@ public class PauseConfrmDialogFragment extends DialogFragment{
         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                GameSystem.Instance.SetIsPaused(GameSystem.Instance.GetIsPaused());
                 //cancel pause
                 IsShown = false;
             }
