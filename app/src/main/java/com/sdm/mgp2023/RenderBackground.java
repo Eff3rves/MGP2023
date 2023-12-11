@@ -19,6 +19,16 @@ public class RenderBackground implements EntityBase {
 
 
     @Override
+    public String GetType() {
+        return null;
+    }
+
+    @Override
+    public float GetRadius() {
+        return 0;
+    }
+
+    @Override
     public boolean IsDone(){
         return isDone;
     }
@@ -44,6 +54,7 @@ public class RenderBackground implements EntityBase {
 
     @Override
     public void Update(float _dt){
+        if(GameSystem.Instance.GetIsPaused()) return;
     //Horizontal Scrolling
         //Vertical Scrolling
         xPos -= _dt * 500;
