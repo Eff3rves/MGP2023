@@ -104,6 +104,7 @@ public class EntityManager {
 
         for(int i = 0; i <entityList.size(); ++i)
         {
+            if(!entityList.get(i).IsDone())
             entityList.get(i).Render(_canvas);
         }
     }

@@ -144,6 +144,16 @@ public class SmurfEntity implements EntityBase, Collidable{
     public ENTITY_TYPE GetEntityType(){return ENTITY_TYPE.ENT_SMURF;}
 
     @Override
+    public void SetPosY(float move) {
+
+    }
+
+    @Override
+    public void SetPosX(float move) {
+
+    }
+
+    @Override
     public String GetType() {
         return "SmurfEntity";
     }

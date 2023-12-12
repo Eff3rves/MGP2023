@@ -32,8 +32,9 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="178dp"
-        android:layout_marginTop="100dp"
+        android:layout_height="178sp"
+        android:layout_marginTop="50sp"
+        android:gravity="center"
         android:text="Netrunner"
         android:textAlignment="center"
         android:textColor="#0099ff"

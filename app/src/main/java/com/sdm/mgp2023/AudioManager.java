@@ -1,4 +1,4 @@
-package com.sdm.MGP2023;
+package com.sdm.mgp2023;
 
 import android.content.res.Resources;
 import android.media.MediaPlayer;

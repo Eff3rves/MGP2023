@@ -74,6 +74,7 @@ public class RenderTextEntity implements EntityBase{
         paint.setTextSize(50);
 
         _canvas.drawText("FPS "+fps,30,80,paint);
+        _canvas.drawText("Score: "+PlayerStats.Instance.getPlayerScore(),30,160,paint);
     }
 
     @Override

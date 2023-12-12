@@ -7,9 +7,11 @@ import android.view.SurfaceView;
 
 public interface EntityBase
 {
+
     String GetType();
 
     float GetRadius();
+
 
     //used for entities such as background
     enum ENTITY_TYPE{
@@ -19,6 +21,7 @@ public interface EntityBase
         ENT_TEXT,
         //ENT_NEXT,
         ENT_RUNNER,
+        ENT_COIN,
         ENT_DEFAULT,
 
     }

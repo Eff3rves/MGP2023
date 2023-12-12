@@ -11,7 +11,7 @@ import android.view.SurfaceView;
 // Created by TanSiewLan2021
 
 public class MainGameSceneState implements StateBase {
-    private float timer = 0.0f;
+    private float timer = 5.0f;
 
     @Override
     public String GetName() {
@@ -27,6 +27,7 @@ public class MainGameSceneState implements StateBase {
         RunnerEntity.Create();
         RenderTextEntity.Create();
         PauseButtonEntity.Create();
+//        CoinEntity.Create();
     }
 
     @Override
@@ -48,9 +49,12 @@ public class MainGameSceneState implements StateBase {
 
     @Override
     public void Update(float _dt) {
-
+        timer += _dt;
         EntityManager.Instance.Update(_dt);
-
+        if(timer > 5){
+            CoinManager.Instance.CreateCoins();
+            timer =0;
+        }
     }
 }
 

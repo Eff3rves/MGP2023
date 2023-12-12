@@ -7,6 +7,9 @@ public interface Collidable {
 
     float GetPosX();
     float GetPosY();
+
+    void SetPosY(float move);
+    void SetPosX(float move);
     float GetRadius();
 
     void OnHit(Collidable _other);

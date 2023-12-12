@@ -4,20 +4,20 @@ import static android.content.ContentValues.TAG;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Build;
+import android.os.VibrationEffect;
 import android.util.Log;
 import android.view.SurfaceView;
 import java.util.Random;
-import  android.os.Build;
-import  android.os.VibrationEffect;
+
 import android.os.Vibrator;
 
-import java.util.Random;
-
-public class RunnerEntity implements EntityBase{
+public class RunnerEntity implements EntityBase,Collidable{
     // 1. Declare the use of spritesheet using Sprite class.
     private  Sprite spritesheet = null;
     private boolean isDone = false;
     private boolean isInit = false;
+
 
     // Variables to be used or can be used.
     public float xPos, yPos, xDir, yDir, lifeTime;
@@ -48,7 +48,7 @@ public class RunnerEntity implements EntityBase{
     @Override
     public void Init(SurfaceView _view) {
         // 2. Loading spritesheet
-        spritesheet = new Sprite(ResourceManager.Instance.GetBitmap(R.drawable.nightborne), 1,6,12);
+        spritesheet = new Sprite(Bitmap.createScaledBitmap(ResourceManager.Instance.GetBitmap(R.drawable.nightborne),2000,500,true), 1,6,12);
         //smurf uis 4 rows 4 columns and 16frames
 
         //in the sprite class, there is SetAnimationFrames
@@ -100,7 +100,19 @@ public class RunnerEntity implements EntityBase{
         }
     }
 
+    public  void startVibrate(){
+        if(Build.VERSION.SDK_INT >= 26){
+            _vibrator.vibrate(VibrationEffect.createOneShot(150,10));
+        }
+        else{
+            long pattern[] = {0,50,0};
+            _vibrator.vibrate(pattern,-1);
+        }
+    }
 
+    public  void  stopVibrate(){
+        _vibrator.cancel();
+    }
     @Override
     public void Render(Canvas _canvas) {
         // This is for our sprite animation!
@@ -127,9 +139,30 @@ public class RunnerEntity implements EntityBase{
     public ENTITY_TYPE GetEntityType() {
         return ENTITY_TYPE.ENT_RUNNER;
     }
+
+    @Override
+    public void SetPosY(float move) {
+
+    }
+
+    @Override
+    public void SetPosX(float move) {
+
+    }
+
     @Override
     public String GetType() {
         return "RunnerEntity";
+    }
+
+    @Override
+    public float GetPosX() {
+        return xPos;
+    }
+
+    @Override
+    public float GetPosY() {
+        return yPos;
     }
 
     @Override
@@ -137,5 +170,13 @@ public class RunnerEntity implements EntityBase{
         return spritesheet.GetHeight() * 0.5f;
     }
 
+    @Override
+    public void OnHit(Collidable _other) {
+        if(_other.GetType()!= this.GetType() && _other.GetType()=="CoinEntity"){
+            startVibrate();
+            Log.v(TAG,"Hit");
+            PlayerStats.Instance.setPlayerScore(PlayerStats.Instance.getPlayerScore()+1);
+        }
+    }
 
 }
