@@ -75,6 +75,7 @@ public class RenderTextEntity implements EntityBase{
 
         _canvas.drawText("FPS "+fps,30,80,paint);
         _canvas.drawText("Score: "+PlayerStats.Instance.getPlayerScore(),30,160,paint);
+        _canvas.drawText("HP: "+ PlayerStats.Instance.getPlayerHp(),30,240,paint);
     }
 
     @Override

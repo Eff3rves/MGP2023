@@ -1,5 +1,6 @@
 package com.sdm.mgp2023;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.SurfaceView;
 
@@ -22,6 +23,10 @@ public class EntityManager {
     public void Init(SurfaceView _view)
     {
         view = _view;
+    }
+
+    public  SurfaceView getView(){
+        return  view;
     }
 
     public void Update(float _dt)
@@ -91,6 +96,7 @@ public class EntityManager {
         removalList.clear();
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public void Render(Canvas _canvas)
     {
       
@@ -104,8 +110,9 @@ public class EntityManager {
 
         for(int i = 0; i <entityList.size(); ++i)
         {
-            if(!entityList.get(i).IsDone())
-            entityList.get(i).Render(_canvas);
+            if(!entityList.get(i).IsDone()) {
+                entityList.get(i).Render(_canvas);
+            }
         }
     }
 

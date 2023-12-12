@@ -62,6 +62,7 @@ public class StateManager {
             prevState = currState;
             currState = nextState;
             curr = next;
+            System.out.println(currState);
         }
 
         if (curr != null)

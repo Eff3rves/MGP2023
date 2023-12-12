@@ -1,20 +1,16 @@
 package com.sdm.mgp2023;
 
-import static android.content.ContentValues.TAG;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Vibrator;
-import android.util.Log;
 import android.view.SurfaceView;
 
 import java.util.Random;
 
-public class CoinEntity implements EntityBase,Collidable{
+public class BulletEntity implements EntityBase,Collidable {
 
     private  Sprite spritesheet = null;
     private boolean isDone = false;
-
+    private Bitmap bmP = null;
     private boolean isInit = false;
     public float xPos, yPos, xDir, yDir, lifeTime;
     @Override
@@ -40,18 +36,19 @@ public class CoinEntity implements EntityBase,Collidable{
     @Override
     public void OnHit(Collidable _other) {
         if(_other.GetType() == "RunnerEntity"){
+            PlayerStats.Instance.setPlayerHp(PlayerStats.Instance.getPlayerHp()-1);
             isDone = true;
         }
     }
 
     @Override
     public String GetType() {
-        return "CoinEntity";
+        return "BulletEntity";
     }
 
     @Override
     public float GetRadius() {
-        return spritesheet.GetHeight() * 0.5f;
+        return 5;
     }
 
     @Override
@@ -63,17 +60,17 @@ public class CoinEntity implements EntityBase,Collidable{
     public void SetIsDone(boolean _isDone) {
         isDone = _isDone;
     }
-    public static CoinEntity Create() {
-        CoinEntity result = new CoinEntity();
-        EntityManager.Instance.AddEntity(result, ENTITY_TYPE.ENT_COIN);
+    public static BulletEntity Create() {
+        BulletEntity result = new BulletEntity();
+        EntityManager.Instance.AddEntity(result, ENTITY_TYPE.ENT_BULLET);
         return result;
     }
     @Override
     public void Init(SurfaceView _view) {
         // 2. Loading spritesheet
 
-        spritesheet = new Sprite(Bitmap.createScaledBitmap(ResourceManager.Instance.GetBitmap(R.drawable.coin),1000,100,true)
-                , 1,9,9);
+        spritesheet = new Sprite(Bitmap.createScaledBitmap(ResourceManager.Instance.GetBitmap(R.drawable.malware),100,100,true)
+                , 1,1,1);
 
         //smurf uis 4 rows 4 columns and 16frames
         //in the sprite class, there is SetAnimationFrames
@@ -88,7 +85,7 @@ public class CoinEntity implements EntityBase,Collidable{
 
         yPos = ranGen.nextFloat()*(_view.getHeight()*0.75f);
         System.out.println(yPos);
-        xDir = -100.f;
+        xDir = -200.f;
         yDir = 10.f;
 
         isInit = true;
@@ -128,7 +125,7 @@ public class CoinEntity implements EntityBase,Collidable{
     }
 
     @Override
-    public ENTITY_TYPE GetEntityType() {
-        return ENTITY_TYPE.ENT_COIN;
+    public EntityBase.ENTITY_TYPE GetEntityType() {
+        return EntityBase.ENTITY_TYPE.ENT_BULLET;
     }
 }

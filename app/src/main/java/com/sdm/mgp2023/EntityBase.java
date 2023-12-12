@@ -22,6 +22,7 @@ public interface EntityBase
         //ENT_NEXT,
         ENT_RUNNER,
         ENT_COIN,
+        ENT_BULLET,
         ENT_DEFAULT,
 
     }

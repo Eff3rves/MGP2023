@@ -55,6 +55,7 @@ public class MainGameSceneState implements StateBase {
             CoinManager.Instance.CreateCoins();
             timer =0;
         }
+        BulletManager.Instance.Update(_dt);
     }
 }
 

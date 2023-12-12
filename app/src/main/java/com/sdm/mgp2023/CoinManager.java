@@ -1,5 +1,6 @@
 package com.sdm.mgp2023;
 
+
 import java.util.Random;
 
 public class CoinManager {
@@ -15,11 +16,13 @@ public class CoinManager {
             CoinEntity coin;
 
             coin = CoinEntity.Create();
+            coin.Init(EntityManager.Instance.getView());
             if(i == 0){
                 coinYpos = coin.GetPosY();
             }
+            //System.out.println(coinYpos);
             coin.SetPosY(coinYpos);
-            coin.SetPosX(coin.GetPosX()+ i*800);
+            coin.SetPosX(coin.GetPosX()+ i*80);
         }
     }
 }

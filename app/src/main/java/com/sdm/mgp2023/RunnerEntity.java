@@ -59,9 +59,9 @@ public class RunnerEntity implements EntityBase,Collidable{
 
         Random ranGen = new Random();
 
-        xPos = ranGen.nextFloat() * _view.getWidth();
+        xPos = PlayerStats.Instance.getPlayerStartPosX();
 
-        yPos = ranGen.nextFloat()*_view.getHeight();
+        yPos = PlayerStats.Instance.getPlayerStartPosY();
 
         xDir = ranGen.nextFloat()*100.0f-50.0f;
         yDir = ranGen.nextFloat()*100.0f-50.0f;
@@ -74,6 +74,15 @@ public class RunnerEntity implements EntityBase,Collidable{
     @Override
     public void Update(float _dt) {
         if(GameSystem.Instance.GetIsPaused()) return;
+
+        if(PlayerStats.Instance.getPlayerHp() <=0){
+            if(LoseDialogFragment.IsShown){
+                return;
+            }
+            LoseDialogFragment newLose = new LoseDialogFragment();
+            newLose.show(GamePage.Instance.getSupportFragmentManager(),"Lose");
+        }
+
         // 4. Update spritesheet
         spritesheet.Update(_dt);
         // 5. Deal with the touch on screen for interaction of the image using collision check
@@ -81,6 +90,8 @@ public class RunnerEntity implements EntityBase,Collidable{
         {
             // 6. Check collision here!!!
             float imgRadius = spritesheet.GetWidth()*0.5f;
+
+
 
             if(Collision.SphereToSphere(TouchManager.Instance.GetPosX(), TouchManager.Instance.GetPosY(), 0.0f,xPos,yPos,imgRadius)||hasTouched)
             {
@@ -167,7 +178,7 @@ public class RunnerEntity implements EntityBase,Collidable{
 
     @Override
     public float GetRadius() {
-        return spritesheet.GetHeight() * 0.5f;
+        return 250 * 0.5f;
     }
 
     @Override
