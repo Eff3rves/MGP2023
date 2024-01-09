@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.VibrationEffect;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceView;
 import java.util.Random;
@@ -18,6 +19,7 @@ public class RunnerEntity implements EntityBase,Collidable{
     private boolean isDone = false;
     private boolean isInit = false;
 
+    private float gravity = 9800;
 
     // Variables to be used or can be used.
     public float xPos, yPos, xDir, yDir, lifeTime;
@@ -66,6 +68,10 @@ public class RunnerEntity implements EntityBase,Collidable{
         xDir = ranGen.nextFloat()*100.0f-50.0f;
         yDir = ranGen.nextFloat()*100.0f-50.0f;
 
+        DisplayMetrics metrics = _view.getResources().getDisplayMetrics();
+        ScreenWidth = metrics.widthPixels;
+        ScreenHeight = metrics.heightPixels;
+
         isInit = true;
 
         _vibrator = (Vibrator)_view.getContext().getSystemService(_view.getContext().VIBRATOR_SERVICE);
@@ -83,32 +89,42 @@ public class RunnerEntity implements EntityBase,Collidable{
             newLose.show(GamePage.Instance.getSupportFragmentManager(),"Lose");
         }
 
+
         // 4. Update spritesheet
         spritesheet.Update(_dt);
         // 5. Deal with the touch on screen for interaction of the image using collision check
-        if (TouchManager.Instance.HasTouch())
-        {
-            // 6. Check collision here!!!
-            float imgRadius = spritesheet.GetWidth()*0.5f;
+        //temp since i think i will change this to a jump
+//        if (TouchManager.Instance.HasTouch())
+//        {
+//            // 6. Check collision here!!!
+//            float imgRadius = spritesheet.GetWidth()*0.5f;
+//
+//
+//
+//            if(Collision.SphereToSphere(TouchManager.Instance.GetPosX(), TouchManager.Instance.GetPosY(), 0.0f,xPos,yPos,imgRadius)||hasTouched)
+//            {
+//                // Collided!
+//                hasTouched = true;
+//
+//                // 7. Drag the sprite around the screen
+//                xPos = TouchManager.Instance.GetPosX();
+//                yPos = TouchManager.Instance.GetPosY();
+//                xDir += xDir*_dt;
+//                yDir += yDir*_dt;
+//            }
+//
+//            return;
+//        }
 
-
-
-            if(Collision.SphereToSphere(TouchManager.Instance.GetPosX(), TouchManager.Instance.GetPosY(), 0.0f,xPos,yPos,imgRadius)||hasTouched)
-            {
-                // Collided!
-                hasTouched = true;
-
-                // 7. Drag the sprite around the screen
-                xPos = TouchManager.Instance.GetPosX();
-                yPos = TouchManager.Instance.GetPosY();
-                xDir += xDir*_dt;
-                yDir += yDir*_dt;
-            }
-
-
-
-
+        if(yPos >= ScreenHeight){
+            PlayerStats.Instance.setPlayerHp(0);
         }
+
+        if(PlayerStats.Instance.getJump()){
+            applyJump();
+        }
+
+        applyGravity(_dt);
     }
 
     public  void startVibrate(){
@@ -188,6 +204,22 @@ public class RunnerEntity implements EntityBase,Collidable{
             Log.v(TAG,"Hit");
             PlayerStats.Instance.setPlayerScore(PlayerStats.Instance.getPlayerScore()+1);
         }
+    }
+
+    //apply gravity for jump
+    // Function to apply gravity
+    private void applyGravity(float dt) {
+        // Update the vertical position (yPos) based on gravity
+        float deltaTimeSquared = dt * dt; // Square of time step
+
+        yPos +=0.5f* gravity * deltaTimeSquared;
+//        System.out.println(yPos);
+
+    }
+
+    private void applyJump(){
+        yPos-= 250;
+        PlayerStats.Instance.setJumpFalse();
     }
 
 }

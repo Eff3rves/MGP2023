@@ -20,6 +20,11 @@ public class TouchManager {
     }
 
     private int posX, posY;
+
+    private float y1 ,y2;
+
+    private float swipeTimer = 0;
+    private float minSwipeTime = 60;
     private TouchState status = TouchState.NONE; //Set to default as NONE
 
     public boolean HasTouch(){  // Check for a touch status on screen
@@ -45,6 +50,8 @@ public class TouchManager {
         switch (_motionEventStatus){
             case MotionEvent.ACTION_DOWN:
                 status = TouchState.DOWN;
+                y1 = posY;
+
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -52,6 +59,12 @@ public class TouchManager {
                 break;
 
             case MotionEvent.ACTION_UP:
+                y2 = posY;
+                if(y1-y2 > 50 ){
+                    PlayerStats.Instance.setJumpTrue();
+                    System.out.println("Jump");
+                }
+
                 status = TouchState.NONE;
                 break;
         }

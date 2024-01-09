@@ -87,7 +87,7 @@ public class CoinEntity implements EntityBase,Collidable{
         xPos = _view.getWidth();
 
         yPos = ranGen.nextFloat()*(_view.getHeight()*0.75f);
-        System.out.println(yPos);
+        //System.out.println(yPos);
         xDir = -100.f;
         yDir = 10.f;
 
