@@ -19,6 +19,8 @@ public class RunnerEntity implements EntityBase,Collidable{
     private boolean isDone = false;
     private boolean isInit = false;
 
+    private boolean isCollidingWithGround = false;
+    public boolean isGrav = true;
     private float gravity = 9800;
 
     // Variables to be used or can be used.
@@ -116,6 +118,16 @@ public class RunnerEntity implements EntityBase,Collidable{
 //            return;
 //        }
 
+        // Inside RunnerEntity's Update method or elsewhere in your game logic
+        if (isCollidingWithGround()) {
+            // The runner is currently colliding with the ground
+
+        } else {
+            // The runner is not colliding with the ground
+            isGrav = true;
+
+        }
+
         if(yPos >= ScreenHeight){
             PlayerStats.Instance.setPlayerHp(0);
         }
@@ -204,22 +216,50 @@ public class RunnerEntity implements EntityBase,Collidable{
             Log.v(TAG,"Hit");
             PlayerStats.Instance.setPlayerScore(PlayerStats.Instance.getPlayerScore()+1);
         }
+        // Check if the runner gets hit by the ground
+        if (_other.GetType().equals("GroundEntity")) {
+            GroundEntity ground = (GroundEntity) _other;
+
+            // Compare positions to determine the direction of the hit
+            if (GetPosY() < ground.GetPosY()+ground.GetScaleY()) {
+                // Runner hits the ground from the top
+                // Handle top collision here
+                isCollidingWithGround = true;
+            } else if (GetPosY() > ground.GetPosY()+ground.GetScaleY()) {
+                // Runner hits the ground from the bottom
+                // Handle bottom collision here
+                isCollidingWithGround = true;
+            } else {
+                // Runner is no longer colliding with the ground
+                isCollidingWithGround = false;
+            }
+        }
+    }
+
+    // Additional method to check if the runner is colliding with the ground
+    public boolean isCollidingWithGround() {
+        return isCollidingWithGround;
     }
 
     //apply gravity for jump
     // Function to apply gravity
     private void applyGravity(float dt) {
-        // Update the vertical position (yPos) based on gravity
-        float deltaTimeSquared = dt * dt; // Square of time step
+        if(isGrav){
+            // Update the vertical position (yPos) based on gravity
+            float deltaTimeSquared = dt * dt; // Square of time step
 
-        yPos +=0.5f* gravity * deltaTimeSquared;
+            yPos +=0.5f* gravity * deltaTimeSquared;
 //        System.out.println(yPos);
+        }
+
 
     }
 
     private void applyJump(){
         yPos-= 250;
         PlayerStats.Instance.setJumpFalse();
+        //since at the start of the game gravity is already set as true, the only other time where gravity needs to be set true again is when the player jumps
+        isGrav = true;
     }
 
 }

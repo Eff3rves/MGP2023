@@ -97,6 +97,10 @@ public class BulletEntity implements EntityBase,Collidable {
         if(GameSystem.Instance.GetIsPaused()) return;
         // 4. Update spritesheet
         spritesheet.Update(_dt);
+
+        if(xPos+50 < 0){
+            isDone = true;
+        }
         xPos += xDir*_dt;
     }
 
