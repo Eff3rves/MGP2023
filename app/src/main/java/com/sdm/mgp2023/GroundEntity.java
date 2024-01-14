@@ -15,7 +15,13 @@ public class GroundEntity implements EntityBase,Collidable {
     private boolean isDone = false;
 
     private boolean isInit = false;
-    private float scaleX,scaleY;
+    public float scaleX,scaleY;
+
+    public static GroundEntity Create() {
+        GroundEntity result = new GroundEntity();
+        EntityManager.Instance.AddEntity(result, ENTITY_TYPE.ENT_FLOOR);
+        return result;
+    }
 
     @Override
     public String GetType() {
@@ -63,15 +69,16 @@ public class GroundEntity implements EntityBase,Collidable {
             RunnerEntity runner = (RunnerEntity) _other;
 
             // Compare positions to determine the direction of the hit
-            if (runner.GetPosY() < posY) {
+            if (runner.GetPosY() < posY+scaleY) {
                 // Runner hits the ground from the top
                 // Handle top collision here
 
                 //set grav as false so that the player stops falling
                 runner.isGrav= false;
-            } else if (runner.GetPosY() > posY) {
+            } else if (runner.GetPosY() > posY-scaleY) {
                 // Runner hits the ground from the bottom
                 // Handle bottom collision here
+                runner.yPos = posY-scaleY;
             }
 
             if (runner.GetPosX() < posX) {
@@ -98,7 +105,8 @@ public class GroundEntity implements EntityBase,Collidable {
 
     @Override
     public void Init(SurfaceView _view) {
-        spritesheet = new Sprite(Bitmap.createScaledBitmap(ResourceManager.Instance.GetBitmap(R.drawable.floor),100,100,true)
+        (scaleY) = (scaleX) = 100;
+        spritesheet = new Sprite(Bitmap.createScaledBitmap(ResourceManager.Instance.GetBitmap(R.drawable.floor),(int)scaleX,(int)scaleY,true)
                 , 1,1,1);
 
         Random ranGen = new Random();

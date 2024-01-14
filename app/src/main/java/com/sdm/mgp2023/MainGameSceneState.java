@@ -53,6 +53,7 @@ public class MainGameSceneState implements StateBase {
         EntityManager.Instance.Update(_dt);
         if(timer > 5){
             CoinManager.Instance.CreateCoins();
+            FloorManager.Instance.CreateFloor();
             timer =0;
         }
         BulletManager.Instance.Update(_dt);
