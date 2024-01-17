@@ -41,6 +41,8 @@ public class CoinEntity implements EntityBase,Collidable{
     public void OnHit(Collidable _other) {
         if(_other.GetType() == "RunnerEntity"){
             isDone = true;
+            //Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6075">Pixabay</a>
+            AudioManager.Instance.PlayAudio(R.raw.coin,50);
         }
     }
 
@@ -86,7 +88,7 @@ public class CoinEntity implements EntityBase,Collidable{
 
         xPos = _view.getWidth();
 
-        yPos = ranGen.nextFloat()*(_view.getHeight()*0.75f);
+        yPos = ranGen.nextInt((int)(_view.getHeight()*0.1f))+(_view.getHeight()*0.5f);
         //System.out.println(yPos);
         xDir = -100.f;
         yDir = 10.f;

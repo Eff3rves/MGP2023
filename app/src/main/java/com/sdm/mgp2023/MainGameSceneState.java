@@ -13,6 +13,8 @@ import android.view.SurfaceView;
 public class MainGameSceneState implements StateBase {
     private float timer = 5.0f;
 
+    private float floorTimer =0;
+
     @Override
     public String GetName() {
         return "MainGame";
@@ -28,6 +30,8 @@ public class MainGameSceneState implements StateBase {
         RenderTextEntity.Create();
         PauseButtonEntity.Create();
 //        CoinEntity.Create();
+
+
     }
 
     @Override
@@ -49,13 +53,24 @@ public class MainGameSceneState implements StateBase {
 
     @Override
     public void Update(float _dt) {
+        if(GameSystem.Instance.GetIsPaused()) return;
         timer += _dt;
+        floorTimer += _dt;
         EntityManager.Instance.Update(_dt);
         if(timer > 5){
+
             CoinManager.Instance.CreateCoins();
-            FloorManager.Instance.CreateFloor();
+
             timer =0;
         }
+
+        if(floorTimer > 2){
+            FloorManager.Instance.CreateFloor();
+            floorTimer = 0;
+        }
+
+        FloorManager.Instance.RemoveDoneFloors();
+
         BulletManager.Instance.Update(_dt);
     }
 }

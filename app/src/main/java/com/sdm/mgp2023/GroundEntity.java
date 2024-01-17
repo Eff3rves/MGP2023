@@ -43,7 +43,7 @@ public class GroundEntity implements EntityBase,Collidable {
     }
 
     public float GetScaleX() {
-        return scaleX;
+        return scaleX*2;
     }
 
 
@@ -74,13 +74,19 @@ public class GroundEntity implements EntityBase,Collidable {
                 // Handle top collision here
 
                 //set grav as false so that the player stops falling
-                runner.isGrav= false;
+
+                if (runner.GetPosX() < posX + scaleX && runner.GetPosX() > posX - scaleX) {
+
+                    runner.isGrav= false;
+
+
+                }
             } else if (runner.GetPosY() > posY-scaleY) {
                 // Runner hits the ground from the bottom
                 // Handle bottom collision here
                 runner.yPos = posY-scaleY;
-            }
 
+            }
             if (runner.GetPosX() < posX) {
                 // Runner hits the ground from the left
                 // Handle left collision here
@@ -90,6 +96,7 @@ public class GroundEntity implements EntityBase,Collidable {
 
 
             }
+
         }
     }
 
@@ -106,25 +113,35 @@ public class GroundEntity implements EntityBase,Collidable {
     @Override
     public void Init(SurfaceView _view) {
         (scaleY) = (scaleX) = 100;
-        spritesheet = new Sprite(Bitmap.createScaledBitmap(ResourceManager.Instance.GetBitmap(R.drawable.floor),(int)scaleX,(int)scaleY,true)
-                , 1,1,1);
+
 
         Random ranGen = new Random();
 
-        posX = _view.getWidth();
 
-        posY = (float) _view.getHeight() /2 + ranGen.nextFloat()*(_view.getHeight()*0.75f);
         //System.out.println(yPos);
         xDir = -200.f;
 
         isInit = true;
     }
 
+    public void SetDefaultPos(SurfaceView _view){
+        Random ranGen = new Random();
+        posX = _view.getWidth();
+
+        posY = Math.min( (float)_view.getHeight() / 2 + ranGen.nextFloat() * (_view.getHeight() * 0.75f),_view.getHeight() - 100);
+
+    }
+
+
+    public void initBitmap(){
+        spritesheet = new Sprite(Bitmap.createScaledBitmap(ResourceManager.Instance.GetBitmap(R.drawable.floor),(int)scaleX,(int)scaleY,true)
+                , 1,1,1);
+    }
     @Override
     public void Update(float _dt) {
         if(GameSystem.Instance.GetIsPaused()) return;
 
-        if(posX+scaleX < 0){
+        if(posX+scaleX*2 < 0){
             isDone = true;
         }
         // 4. Update spritesheet
@@ -148,7 +165,7 @@ public class GroundEntity implements EntityBase,Collidable {
 
     @Override
     public int GetRenderLayer() {
-        return LayerConstants.SMURF_LAYER;
+        return LayerConstants.PLAYER_LAYER;
     }
 
     @Override

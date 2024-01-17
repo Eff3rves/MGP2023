@@ -7,45 +7,49 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.app.Activity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.window.SplashScreen;
 
-public class Mainmenu extends Activity implements OnClickListener, StateBase
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Leaderboard extends Activity  implements OnClickListener, StateBase
 {
     //we have 2 buttons start button and back button
-    //start button when press will go to another page..maybe gamepage
-    //back button when press will go back to splash page for now
 
     //define buttons before start as buttons are objects (define as private as is solely used here)
-    private Button btn_start; //int a
     private Button btn_back;
 
-    private Button btn_leader;
+    private TextView tv_score;
+    private EditText ed_text;
+    private Button bt_apply,bt_save;
 
+    public static final String SHARED_PREFS = "SharePref";
+    public static final String TEXT = "text";
+
+    private String text;
     @Override
     protected void onCreate(Bundle SaveInstanceState)
     {
         super.onCreate(SaveInstanceState);
+        //Hide Title
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Hide Top Bar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.mainmenu);
-
-        //never import R ( very important ILLEGAL)
-        //even if android tell u do dont do it
-        //if see this means your XML file has error
-        btn_start=(Button)findViewById(R.id.btn_start);
-        btn_start.setOnClickListener(this);
+        setContentView(R.layout.leaderboardpage);
 
         btn_back=(Button)findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);
 
-        btn_leader=(Button) findViewById(R.id.btn_LeaderBoard);
-        btn_leader.setOnClickListener(this);
-        //this allows the correct button to be the object name and
-        //for this case button.
-        //setonclicklistener to the specified button so that we know
-        //when the specific button is clicked/touch
-        //it knows what to do
+        tv_score = (TextView)findViewById(R.id.tv_score);
+//        ed_text=(EditText) findViewById(R.id.ed_text);
+//        bt_apply = (Button) findViewById(R.id.btn_apply);
+//        bt_save = (Button)findViewById(R.id.btn_save);
 
     }
     @Override
@@ -63,18 +67,11 @@ public class Mainmenu extends Activity implements OnClickListener, StateBase
         //intent to move from mainmenu class to eg, gamepage class
         //for now we go to splashpage
 
-        if(v== btn_start){
-            intent.setClass(this, GamePage.class);
-            StateManager.Instance.ChangeState("MainGame");
-            //Goes to MainGameSceneState hence why need to set class to Game Page
-        }
-        else if(v == btn_back)
+        if(v == btn_back)
         {
-            this.finishAffinity();
-        }
-        else if (v==btn_leader) {
-            intent.setClass(this, Leaderboard.class);
-            StateManager.Instance.ChangeState("Leaderboard");
+            intent.setClass(this, Mainmenu.class);
+            StateManager.Instance.ChangeState("MainMenu");
+
         }
         /*
         If you want to add an exit button on the main menu.
@@ -88,7 +85,7 @@ public class Mainmenu extends Activity implements OnClickListener, StateBase
 
     @Override
     public String GetName(){
-        return "MainMenu";
+        return "Leaderboard";
     }
 
     @Override
@@ -119,4 +116,5 @@ public class Mainmenu extends Activity implements OnClickListener, StateBase
 
     @Override
     protected void onDestroy(){super.onDestroy();}
+
 }

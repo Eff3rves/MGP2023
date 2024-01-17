@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/leaderboardbg">
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="158sp"
+        android:layout_height="50sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="726dp"
+        android:background="@drawable/button1"
+        android:text="Back"
+        android:textColor="#ff0000"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="-3dp" />
+
+    <TextView
+        android:id="@+id/tv_score"
+        android:layout_width="800sp"
+        android:layout_height="300sp"
+        android:layout_marginLeft="40sp"
+        android:layout_marginTop="80sp"
+        android:text="1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="25sp" />
+
+    <TextView
+        android:layout_width="500sp"
+        android:layout_height="70sp"
+        android:layout_marginTop="10sp"
+        android:background="@drawable/button1"
+        android:backgroundTint="@color/design_default_color_background"
+        android:layout_marginLeft="200sp"
+        android:text="Leaderboard"
+        android:textSize="50sp"
+        android:textAllCaps="true"
+        android:textColor="@color/teal_200"
+        android:textAlignment="center"
+        />
+
+</RelativeLayout>

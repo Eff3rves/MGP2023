@@ -125,6 +125,11 @@ public class EntityManager {
     {
         entityList.clear();
     }
+
+    public LinkedList<EntityBase> getEntityList(){
+        return entityList;
+    }
+
 }
 
 

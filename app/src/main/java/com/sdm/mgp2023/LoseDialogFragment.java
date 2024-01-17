@@ -4,7 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 public class LoseDialogFragment extends DialogFragment {
@@ -17,13 +21,17 @@ public class LoseDialogFragment extends DialogFragment {
         GameSystem.Instance.SetIsPaused(true);
         //use the Builder class to create the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("You lose").setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
+        GameSystem.Instance.SaveEditBegin();
+        GameSystem.Instance.SetIntInSave("Score",PlayerStats.Instance.getFinalPlayerScore());
+        GameSystem.Instance.SaveEditEnd();
+        builder.setMessage("You Died your Score: "+ PlayerStats.Instance.getFinalPlayerScore()).setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
 
                 //cancel pause
                 IsShown = false;
+                GameSystem.Instance.SetIsPaused(false);
                 StateManager.Instance.ChangeState("MainMenu");
             }
         });//.setPositiveButton("Restart", new DialogInterface.OnClickListener() {
@@ -49,4 +57,5 @@ public class LoseDialogFragment extends DialogFragment {
     public  void onDismiss(DialogInterface dialog){
         IsShown = false;
     }
+
 }

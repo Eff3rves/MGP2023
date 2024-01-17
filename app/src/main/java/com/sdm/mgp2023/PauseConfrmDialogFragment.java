@@ -14,19 +14,23 @@ public class PauseConfrmDialogFragment extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         IsShown = true;
+        GameSystem.Instance.SetIsPaused(true);
         //use the Builder class to create the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Confirm Pause Game?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("Game Paused").setPositiveButton("Unpause", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //trigger pause
-                GameSystem.Instance.SetIsPaused(!GameSystem.Instance.GetIsPaused());
+                GameSystem.Instance.SetIsPaused(false);
                 IsShown = false;
             }
-        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                GameSystem.Instance.SetIsPaused(GameSystem.Instance.GetIsPaused());
+                PlayerStats.Instance.setReset(true);
+                StateManager.Instance.ChangeState("MainMenu");
+                GameSystem.Instance.SetIsPaused(false);
+
                 //cancel pause
                 IsShown = false;
             }

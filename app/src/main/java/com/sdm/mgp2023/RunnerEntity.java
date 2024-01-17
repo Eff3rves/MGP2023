@@ -21,7 +21,7 @@ public class RunnerEntity implements EntityBase,Collidable{
 
     private boolean isCollidingWithGround = false;
     public boolean isGrav = true;
-    private float gravity = 9800;
+    private float gravity = 5000;
 
     // Variables to be used or can be used.
     public float xPos, yPos, xDir, yDir, lifeTime;
@@ -83,8 +83,16 @@ public class RunnerEntity implements EntityBase,Collidable{
     public void Update(float _dt) {
         if(GameSystem.Instance.GetIsPaused()) return;
 
+        if(PlayerStats.Instance.getReset()){
+            PlayerStats.Instance.setFinalPlayerScore(PlayerStats.Instance.getPlayerScore());
+            resetPlayerStat();
+        }
+
         if(PlayerStats.Instance.getPlayerHp() <=0){
+            PlayerStats.Instance.setFinalPlayerScore(PlayerStats.Instance.getPlayerScore());
+            resetPlayerStat();
             if(LoseDialogFragment.IsShown){
+                System.out.println("Reset");
                 return;
             }
             LoseDialogFragment newLose = new LoseDialogFragment();
@@ -94,33 +102,13 @@ public class RunnerEntity implements EntityBase,Collidable{
 
         // 4. Update spritesheet
         spritesheet.Update(_dt);
-        // 5. Deal with the touch on screen for interaction of the image using collision check
-        //temp since i think i will change this to a jump
-//        if (TouchManager.Instance.HasTouch())
-//        {
-//            // 6. Check collision here!!!
-//            float imgRadius = spritesheet.GetWidth()*0.5f;
-//
-//
-//
-//            if(Collision.SphereToSphere(TouchManager.Instance.GetPosX(), TouchManager.Instance.GetPosY(), 0.0f,xPos,yPos,imgRadius)||hasTouched)
-//            {
-//                // Collided!
-//                hasTouched = true;
-//
-//                // 7. Drag the sprite around the screen
-//                xPos = TouchManager.Instance.GetPosX();
-//                yPos = TouchManager.Instance.GetPosY();
-//                xDir += xDir*_dt;
-//                yDir += yDir*_dt;
-//            }
-//
-//            return;
-//        }
 
         // Inside RunnerEntity's Update method or elsewhere in your game logic
         if (isCollidingWithGround()) {
+//            System.out.println("On Ground");
+            PlayerStats.Instance.resetJumpCount();
             // The runner is currently colliding with the ground
+            checkNearbyGroundEntities();
 
         } else {
             // The runner is not colliding with the ground
@@ -130,6 +118,7 @@ public class RunnerEntity implements EntityBase,Collidable{
 
         if(yPos >= ScreenHeight){
             PlayerStats.Instance.setPlayerHp(0);
+//            System.out.println("Fell");
         }
 
         if(PlayerStats.Instance.getJump()){
@@ -229,11 +218,43 @@ public class RunnerEntity implements EntityBase,Collidable{
                 // Runner hits the ground from the bottom
                 // Handle bottom collision here
                 isCollidingWithGround = true;
-            } else {
-                // Runner is no longer colliding with the ground
-                isCollidingWithGround = false;
-            }
+            } //else {
+//                // Runner is no longer colliding with the ground
+//                isCollidingWithGround = false;
+//            }
         }
+    }
+
+    private void checkNearbyGroundEntities() {
+        // Iterate through all entities in EntityManager
+        for (EntityBase entity : EntityManager.Instance.getEntityList()) {
+            if (entity instanceof GroundEntity) {
+                GroundEntity ground = (GroundEntity) entity;
+
+                // Calculate distance between the runner and the ground entity
+                float distance = calculateDistance(xPos, yPos, ground.GetPosX(), ground.GetPosY());
+
+                // Check if the ground entity is within the detection range
+                if (distance <= 300) {
+                    // check if the runner is on the ground
+                    boolean isOnGround = yPos >= ground.GetPosY() && yPos <= ground.GetPosY() + ground.GetScaleY();
+//                    System.out.println("Check");
+                    // Update the collision status with the ground
+                    isCollidingWithGround = isOnGround;
+                }
+                else {
+                    isCollidingWithGround = false;
+                }
+            }
+
+        }
+    }
+
+    // Additional method to calculate distance between two points
+    private float calculateDistance(float x1, float y1, float x2, float y2) {
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     // Additional method to check if the runner is colliding with the ground
@@ -256,10 +277,30 @@ public class RunnerEntity implements EntityBase,Collidable{
     }
 
     private void applyJump(){
-        yPos-= 250;
-        PlayerStats.Instance.setJumpFalse();
-        //since at the start of the game gravity is already set as true, the only other time where gravity needs to be set true again is when the player jumps
-        isGrav = true;
+        if(PlayerStats.Instance.getJumpCount() >0){
+            yPos-= 250;
+            PlayerStats.Instance.setJumpFalse();
+            //since at the start of the game gravity is already set as true, the only other time where gravity needs to be set true again is when the player jumps
+            isGrav = true;
+            PlayerStats.Instance.minusJumpCount();
+        }
+
+    }
+
+    public void resetPlayerStat(){
+        PlayerStats stat = PlayerStats.Instance;
+
+        xPos = stat.getPlayerStartPosX();
+
+        yPos = stat.getPlayerStartPosY();
+
+        stat.resetPlayerHp();
+
+        stat.resetPlayerScore();
+
+        stat.setReset(false);
+
+        stat.resetJumpCount();
     }
 
 }

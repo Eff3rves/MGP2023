@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.view.SurfaceView;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class AudioManager {
     public final static AudioManager Instance = new AudioManager();
@@ -44,5 +45,34 @@ public class AudioManager {
             return false;
 
         return audioMap.get(_id).isPlaying();
+    }
+
+    public void StopAudio(int _id){
+        MediaPlayer curr = audioMap.get(_id);
+        curr.stop();
+    }
+
+    public void Release(){
+        for(Map.Entry<Integer,MediaPlayer>entry:audioMap.entrySet()){
+            entry.getValue().stop();
+            entry.getValue().reset();
+            entry.getValue().release();
+        }
+
+        //empty it
+        audioMap.clear();
+    }
+
+    private  MediaPlayer GetAudio(int _id){
+
+        //check if audio is loaded or not
+        if(audioMap.containsKey(_id))
+            //has the clip return it
+            return audioMap.get(_id);
+
+        //load the audio if not
+        MediaPlayer result = MediaPlayer.create(view.getContext(), _id);
+        audioMap.put(_id,result);
+        return result;
     }
 }

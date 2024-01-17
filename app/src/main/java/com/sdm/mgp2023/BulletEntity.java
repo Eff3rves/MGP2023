@@ -37,6 +37,9 @@ public class BulletEntity implements EntityBase,Collidable {
     public void OnHit(Collidable _other) {
         if(_other.GetType() == "RunnerEntity"){
             PlayerStats.Instance.setPlayerHp(PlayerStats.Instance.getPlayerHp()-1);
+
+            //Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=47202">Pixabay</a>
+            AudioManager.Instance.PlayAudio(R.raw.hurt,50);
             isDone = true;
         }
     }

@@ -61,8 +61,11 @@ public class TouchManager {
             case MotionEvent.ACTION_UP:
                 y2 = posY;
                 if(y1-y2 > 50 ){
-                    PlayerStats.Instance.setJumpTrue();
-                    System.out.println("Jump");
+                    if(PlayerStats.Instance.getJumpCount() > 0){
+                        PlayerStats.Instance.setJumpTrue();
+                        System.out.println("Jump");
+                    }
+
                 }
 
                 status = TouchState.NONE;

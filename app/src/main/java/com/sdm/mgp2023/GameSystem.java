@@ -8,9 +8,11 @@ import android.view.SurfaceView;
 
 public class GameSystem {
     public final static GameSystem Instance = new GameSystem();
-
+    public static final String SHARED_PREF_ID = "GameSaveFile";
     // Game stuff
     private boolean isPaused = false;
+    SharedPreferences sharedPref = null;
+    SharedPreferences.Editor editor = null;
 
     // Singleton Pattern : Blocks others from creating
     private GameSystem()
@@ -23,6 +25,8 @@ public class GameSystem {
 
     public void Init(SurfaceView _view)
     {
+        //Get our shared preferences (Save file)
+        sharedPref = GamePage.Instance.getSharedPreferences(SHARED_PREF_ID,0);
 
         // 2. We will add all of our states into the state manager here!
         StateManager.Instance.AddState(new Mainmenu());
@@ -31,6 +35,8 @@ public class GameSystem {
         StateManager.Instance.AddState(new Nextpage());
 			// Plese add state, MainGameSceneState.
         StateManager.Instance.AddState(new MainGameSceneState());
+
+        StateManager.Instance.AddState(new Leaderboard());
     }
 
     public void SetIsPaused(boolean _newIsPaused)
@@ -42,5 +48,36 @@ public class GameSystem {
     {
         return isPaused;
     }
+
+    public  void SaveEditBegin(){
+        // Safety check, only allow if not already editing
+        if(editor != null){
+            return;
+        }
+
+        //Start the editing
+        editor = sharedPref.edit();
+    }
+
+    public  void SaveEditEnd(){
+        // Check if has editor
+        if(editor == null){
+            return;
+        }
+
+        editor.commit();
+        editor = null; // Safety to ensure other functions will fail once commit done
+    }
+
+    public void SetIntInSave(String _key,int _value){
+        if(editor == null)
+            return;
+        editor.putInt(_key,_value);
+    }
+
+    public int GetIntFromSave(String _key){
+        return sharedPref.getInt(_key,10);
+    }
+
 
 }
